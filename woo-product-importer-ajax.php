@@ -204,6 +204,7 @@
                     case 'post_status':
                     case 'comment_status':
                     case 'ping_status':
+                    case 'post_name':
                         $new_post[$map_to] = $col;
                         break;
 
