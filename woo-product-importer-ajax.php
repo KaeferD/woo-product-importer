@@ -16,7 +16,6 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Woo Product Importer.  If not, see <http://www.gnu.org/licenses/>.
 */
-    global $woocommerce;
 
     ini_set("auto_detect_line_endings", true);
 
@@ -84,7 +83,7 @@
         $inserted_rows = array();
 
         // lookup existing product attributes
-        $attribute_taxonomies = $woocommerce->get_attribute_taxonomies(); 
+        $attribute_taxonomies = wc_get_attribute_taxonomies(); 
         if (! is_array($attribute_taxonomies)) $attribute_taxonomies = array();
 
         //this is where the fun begins
@@ -205,6 +204,7 @@
                     case 'post_status':
                     case 'comment_status':
                     case 'ping_status':
+                    case 'post_name':
                         $new_post[$map_to] = $col;
                         break;
 
@@ -337,8 +337,8 @@
                         $term_ids = explode('|', $col);
                         foreach($term_ids as $term_id) {
                             //$term = get_term_by('id', $term_id, $tax, 'ARRAY_A');
-                            $term = term_exists($term_id, $tax);
-
+                            $term = term_exists((int)$term_id, $tax);
+                            
                             //if we got a term, save the id so we can associate
                             if(is_array($term)) {
                                 $new_post_terms[$tax][] = intval($term['term_id']);
@@ -359,7 +359,7 @@
                         foreach($attribute_taxonomies as $attr){
                             if (! is_object($attr)) continue;
                             if (strtolower($field_name) === strtolower($attr->attribute_name) &&
-                                taxonomy_exists( $woocommerce->attribute_taxonomy_name( $attr->attribute_name))){
+                                taxonomy_exists( wc_attribute_taxonomy_name( $attr->attribute_name))){
                                 $product_attr = $attr;
                                 break;
                             } 
@@ -368,7 +368,7 @@
                         // existing attribute
                         if (! is_null($product_attr)){ 
                             // check if this is a new term(s) for the attribute 
-                            $field_name = $woocommerce->attribute_taxonomy_name($product_attr->attribute_name);
+                            $field_name = wc_attribute_taxonomy_name($product_attr->attribute_name);
                             $value = '';
                             $terms = explode('|', $col); 
                             foreach($terms as $t) {

@@ -107,6 +107,11 @@
         'post_title' => array(
             'label' => __( 'Name', 'woo-product-importer' ),
             'mapping_hints' => array('title', 'product name')),
+        
+        'post_name' => array(
+            'label' => __( 'Slug', 'woo-product-importer' ),
+            'mapping_hints' => array()),
+
         '_sku' => array(
             'label' => __( 'SKU', 'woo-product-importer' ),
             'mapping_hints' => array()),
